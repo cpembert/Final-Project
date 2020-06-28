@@ -1,0 +1,18 @@
+---
+title: "Christian Pemberton"
+output: html_document
+---
+
+> __Email Address:__ _cpembert@mail.yu.edu_
+
+------
+
+## Education
+* Yeshiva University, __(2019-2021)__
+* Kean University, __(2014-2019)__
+
+## Employment
+* St. James Preschool, __(2019-Present)__, _Teacher's Assistant_
+* Melinated Moms, __(2017-2018)__, _Public Relations Intern_
+
+^[Printed on: June 21, 2020].
