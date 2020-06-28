@@ -15,4 +15,4 @@ output: html_document
 * St. James Preschool, __(2019-Present)__, _Teacher's Assistant_
 * Melinated Moms, __(2017-2018)__, _Public Relations Intern_
 
-^[Printed on: June 21, 2020].
+^[Printed on: June 28, 2020].
