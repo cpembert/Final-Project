@@ -1,0 +1,181 @@
+---
+title: "Final Project"
+output: html_document
+---
+
+## Introduction:
+The following is a story, regarding NY Emergency Incidents in relation to Queens, NY, by main and sub categories.
+
+## Import:
+```{r setup, include=FALSE}
+# Settings & Loading Libraries
+knitr::opts_chunk$set(fig.width = 10, fig.height = 5)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tidyverse)
+```
+
+```{r}
+# Loading Data
+my_data <- read_csv("https://data.cityofnewyork.us/resource/pasr-j7fb.csv")
+head(my_data)
+```
+
+## Tidy:
+```{r}
+# Creating Factors Based in Incident Type
+my_data = my_data %>%
+  separate(incident_type, c("incident_type_main", "incident_type_sub"), "-")
+```
+
+```{r}
+# Adjusting Borough Names
+
+# Capitalization
+my_data$borough = sub('new york', 'New York', my_data$borough)
+my_data$borough = sub('queens', 'Queens', my_data$borough)
+my_data$borough = sub('bronx', 'Bronx', my_data$borough)
+my_data$borough = sub('manhattan', 'Manhattan', my_data$borough)
+my_data$borough = sub('Staten ISland', 'Staten Island', my_data$borough)
+
+
+# Converting to Neighborhoods to Boroughs 
+my_data$borough = sub('Far Rockaway', 'Queens', my_data$borough)
+my_data$borough = sub('Jamaica', 'Queens', my_data$borough)
+my_data$borough = sub('Richmond Hill', 'Queens', my_data$borough)
+```
+
+```{r}
+# Dropping Boroughs equal to New York 
+my_data = subset(my_data, borough != 'New York')
+```
+
+
+## Explore, model, visualize:
+
+### 1. Which boroughs had the least emergency incidents? 
+
+```{r}
+# Sort Boroughs by Counts
+sorted_boroughs = as.vector(as.data.frame(sort(table(my_data$borough)))$Var1)
+my_data$borough =  factor(my_data$borough,levels = sorted_boroughs) 
+
+# Barplot
+ggplot(my_data, aes(borough)) +
+  geom_bar(fill = 'snow', color = 'black') + 
+  ggtitle('Count of Emergency Incidents Per Borough') +
+  labs(x = 'New York Borough', y = 'Count of Emergency Incidents')
+```
+Queens has the third lowest count of emergency incidents. It has fewer incidents than Brooklyn and Manhattan. 
+
+### 2. Which incidents did Queens have less of, compared to the other boroughs? 
+
+```{r}
+# Stacked Barplot 
+ggplot(my_data, aes(fill = incident_type_main, x = borough)) + 
+  geom_bar(color = 'black') +
+  ggtitle('Main Incident Type Counts Per Borough') +
+  labs(x = 'New York Borough', y = 'Count of Emergency Incidents') + 
+  scale_fill_brewer(palette="Set3", name = 'Main Incident Type')
+```
+Queens has lower counts than at least two boroughs for all of the following incident (main types): transportation, structural, rescue, medical, law enforcement, hazmat, and fire. 
+
+```{r}
+# Subset
+structural_incidents = subset(my_data, my_data$incident_type_main == 'Structural')
+
+# Sort Boroughs by Counts
+sorted_boroughs = as.vector(as.data.frame(sort(table(structural_incidents$borough)))$Var1)
+structural_incidents$borough =  factor(structural_incidents$borough,levels = sorted_boroughs) 
+
+ggplot(structural_incidents, aes(borough)) +
+  geom_bar(fill = 'lightpink', color = 'black') + 
+  ggtitle('Count of Structural Incidents Per Borough') +
+  labs(x = 'New York Borough', y = 'Count of Structural Incidents')
+```
+Queens has the second lowest count of structural emergency incidents. Specifically, it has much lower counts than the Bronx, Manhattan, and Brooklyn. 
+
+
+```{r}
+le_incidents = subset(my_data, my_data$incident_type_main == 'Law Enforcement')
+
+# Sort Boroughs by Counts
+sorted_boroughs = as.vector(as.data.frame(sort(table(le_incidents$borough)))$Var1)
+le_incidents$borough =  factor(le_incidents$borough,levels = sorted_boroughs) 
+
+ggplot(le_incidents, aes(borough)) +
+  geom_bar(fill = 'lightblue', color = 'black') + 
+  ggtitle('Count of Law Enforcement Incidents Per Borough') +
+  labs(x = 'New York Borough', y = 'Count of Law Enforcement Incidents')
+```
+
+Queens has the lowest count of law enforcement emergency incidents. 
+
+```{r}
+fires = subset(my_data, my_data$incident_type_main == 'Fire')
+
+# Sort Boroughs by Counts
+sorted_boroughs = as.vector(as.data.frame(sort(table(fires$borough)))$Var1)
+fires$borough =  factor(fires$borough,levels = sorted_boroughs) 
+
+ggplot(fires, aes(borough)) +
+  geom_bar(fill = 'lavender', color = 'black') + 
+  ggtitle('Count of Fire Incidents Per Borough') +
+  labs(x = 'New York Borough', y = 'Count of Fire Incidents')
+```
+
+Out of all the boroughs in New York City, Queens has the second lowest count of fire incidents. It has lower counts than the Bronx, Brooklyn, and Manhattan. 
+
+### 3. How do the counts of selected incident subtypes vary in Queens compared to other boroughs? 
+
+```{r}
+# Value Counts for Incident Type Sub for Structural Incidents
+sort(table(structural_incidents$incident_type_sub))
+```
+
+There are a lot of structural incidents involving collapses of some sort.
+
+```{r}
+collapse = subset(my_data, incident_type_sub %in% c('Collapse', 'Street Collapse', ' Partial Collapse'))
+
+# Sort Boroughs by Counts
+sorted_boroughs = as.vector(as.data.frame(sort(table(collapse$borough)))$Var1)
+collapse$borough = factor(collapse$borough,levels = sorted_boroughs) 
+
+ggplot(collapse, aes(borough)) +
+  geom_bar(fill = 'lavender', color = 'black') + 
+  ggtitle('Count of Collapses Per Borough') +
+  labs(x = 'New York Borough', y = 'Count of Collapse Incidents')
+```
+
+Queens has the lowest count of structural collapses per borough. 
+
+```{r}
+# Value Counts for Incident Type Sub for Utility Incidents
+utility_incidents = subset(my_data, incident_type_main == 'Utility')
+sort(table(utility_incidents$incident_type_sub))
+```
+
+There are a lot of utility incidents involving steam and gas.
+
+```{r}
+gas_steam = subset(my_data, incident_type_sub %in% c('Steam Main', 'Gas Main Rupture', 
+                                                 'Gas Service Line', 'Gas Low Pressure', 
+                                                 'Gas High Pressure', 'Steam Service Line'))
+
+# Sort Boroughs by Counts
+sorted_boroughs = as.vector(as.data.frame(sort(table(gas_steam$borough)))$Var1)
+gas_steam$borough = factor(gas_steam$borough,levels = sorted_boroughs) 
+
+ggplot(gas_steam, aes(borough)) +
+  geom_bar(fill = 'mediumorchid3', color = 'black') + 
+  ggtitle('Count of Utility Incidents Involving Gas or Steam Per Borough') +
+  labs(x = 'New York Borough', y = 'Count of Utility Incidents Involving Gas or Steam')
+```
+
+Queens has the lowest count of utility incidents involving gas or steam per borough. 
+
+## Conclusion:
+
+In conclusion, Queens is a relatively good neighborhood, with low emergencies in the average New Yorker's areas of concern (Law Enforcement, Structual, Fire). In addition, in areas that had higher incidents, futher investigation by sub-catergory revealed positive insights. For example, though Ultility Incidents showcased the highest record of incidents in Queens; by sub-catergory I saw that Queens had the lowest record of Gas related incidents. Over all, through investigations, Queens is an average borough, with medium safety risk factors. 
