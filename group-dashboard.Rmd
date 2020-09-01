@@ -1,0 +1,151 @@
+---
+title: "Group-Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    vertical_layout: scroll
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width = 10, fig.height = 5)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tidyverse)
+library(lubridate)
+```
+
+
+```{r}
+## Loading & Tidying Christian's Data ##
+
+my_data <- read_csv("https://data.cityofnewyork.us/resource/pasr-j7fb.csv")
+
+# Creating Factors Based in Incident Type
+my_data = my_data %>%
+  separate(incident_type, c("incident_type_main", "incident_type_sub"), "-")
+
+# Adjusting Borough Names
+
+# Capitalization
+my_data$borough = sub('new york', 'New York', my_data$borough)
+my_data$borough = sub('queens', 'Queens', my_data$borough)
+my_data$borough = sub('bronx', 'Bronx', my_data$borough)
+my_data$borough = sub('manhattan', 'Manhattan', my_data$borough)
+my_data$borough = sub('Staten ISland', 'Staten Island', my_data$borough)
+
+# Converting to Neighborhoods to Boroughs 
+my_data$borough = sub('Far Rockaway', 'Queens', my_data$borough)
+my_data$borough = sub('Jamaica', 'Queens', my_data$borough)
+my_data$borough = sub('Richmond Hill', 'Queens', my_data$borough)
+
+# Dropping Boroughs equal to New York 
+my_data = subset(my_data, borough != 'New York')
+```
+
+```{r}
+## Loading & Tidying Chaya's Data
+finalproject<-read_csv("https://data.cityofnewyork.us/resource/43nn-pn8j.csv?$limit=50000")
+finalproject = finalproject %>% group_by(violation_code)
+finalproject = subset(finalproject, boro != '0')
+```
+
+```{r}
+## Loading & Tidying Tamar's Data
+housing_violations <-read_csv("https://data.cityofnewyork.us/resource/wvxf-dwi5.csv") 
+housing_data_clean <-housing_violations %>% 
+  mutate (boro= as.factor(boro))
+housing_data_clean <- housing_data_clean %>%
+  mutate (class= as.factor(class))
+```
+
+```{r}
+## Loading & Tidying Tanzania's Data
+events_data <- read_csv("https://data.cityofnewyork.us/resource/tvpp-9vvx.csv")
+cleandata <- events_data %>%
+mutate(event_type = recode_factor(event_type,
+                               "Block Party" = "Special Event",
+                               "Farmers Market" = "Farmers Market",
+                               "Parade" = "Parade",
+                               "Plaza Event" = "Plaza Event",
+                               "Plaza Partner Event" = " Plaza Event",
+                               "Production Event" = "Production Event",
+                               "Rally" = "Special Event",
+                               "Shooting Permit" = "Special Event",
+                               "Special Event" = "Special Event",
+                               "Sport - Youth" = "Special Event",
+                               "Street Event" = "Street Event",
+                               "Theater Load in and Load Outs" = "Production Event"))
+#Types of events happening in Queens 
+queensfilter<-cleandata %>%
+  select(event_type, event_borough)%>%
+  filter(event_borough== "Queens")
+```
+
+```{r}
+## Loading & Tidying Aaron's Data
+Perm_event <- read_csv("https://data.cityofnewyork.us/resource/tvpp-9vvx.csv?$limit=50000")
+Perm_event_date <- Perm_event%>%
+  separate(start_date_time, into = c("date","time"),sep = " ")%>%
+  mutate(wday = wday(date, label = TRUE,abbr = FALSE))%>%
+  select(event_name, date, wday, event_type, event_borough)
+
+by_date = group_by(Perm_event_date,event_borough, wday)
+sum_date = summarise(by_date,count=n())
+```
+
+### Emergency Incidents Overview by Borough & Incident Type
+
+```{r}
+# Stacked Barplot 
+ggplot(my_data, aes(fill = incident_type_main, x = borough)) + 
+  geom_bar(color = 'black') +
+  labs(x = 'New York Borough', y = 'Count of Emergency Incidents') + 
+  scale_fill_brewer(palette="Set3", name = 'Main Incident Type')
+```
+
+### Number of Restaurant Violations Per Borough
+
+```{r}
+ggplot(finalproject, aes(boro))+
+  geom_bar(mapping = aes(x=boro), color = 'black', fill = 'lightgray') +   
+  labs(x = 'New York Borough', y = 'Count of Restaurant Violations') 
+```
+
+### Number of Housing Violations Per Borough by Class
+
+```{r}
+housing_data_clean %>% 
+  ggplot(aes(fill=class,x=boro)) +
+  geom_bar(position="dodge", color = 'black') +
+  labs(x = 'New York Borough', y = 'Count of Housing Violations') + 
+  scale_fill_brewer(name = 'Housing Class')
+```
+
+### Types of Events Occuring in Queens 
+
+```{r}
+ggplot(queensfilter, aes(event_type))+ 
+  geom_bar(color = 'black', fill = 'snow') +
+  labs(x = 'Event Type', y = 'Count of Events in Queens')
+```
+
+### Frequency of Events by Day Type and Borough
+
+```{r}
+sum_date%>%
+  mutate(wday=recode_factor(wday,
+                             Monday= "Weekday",
+                             Tuesday= "Weekday",
+                             Wednesday= "Weekday",
+                            Thursday="Weekday",
+                            Friday="Weekend",
+                            Saturday="Weekend",
+                            Sunday="Weekend"))%>%
+  group_by(event_borough,wday)%>%
+  summarise(count=sum(count), .groups = 'keep')%>%
+ggplot(aes(fill=wday, y=count, x=event_borough)) +
+  geom_bar(position="dodge", stat="identity", color = 'black') + 
+  scale_fill_brewer(palette="Set2", name = 'Day Type') +
+  labs(x = 'New York Borough', y = 'Count of Events')
+```
+
