@@ -1,0 +1,42 @@
+---
+title: "Dashboard Narrative"
+output: html_document
+---
+When people think of New York, Queens isn’t necessarily the first borough that comes to mind. Most people want to live somewhere lively like Manhattan, or historical like the Bronx. Queens does not offer those things, but it is a quiet place to settle down where you can feel safe but still connected to the city life that New York has to offer. We believe that Queens is the best place for individuals who are 50 years of age and up. We will supply a dashboard and data to support this claim and prove to you that Queens is the best borough for senior citizens. 
+
+### Emergency Response
+
+Overall when it comes to the data, Queen's is third to highest in emergency response incidents. Their two biggest factors being fires and utility, though when compared to the Bronx, Queens has less fires. When it comes to transportation, there are very little incidents in Queens where it is a problem. This means that even if the elderly cannot drive, they should have safe and reliable options to get around and complete the task that they need to. 
+
+We can also see from the second chart displaying law enforcement incidents that Queens is the lowest compared to all the other boroughs. This shows that Queens is a safe place where the elderly should feel comfortable knowing that their property and livelihood will not be interfered with, due to little crime in the area. 
+
+
+### Restaurants 
+
+In the restaurant data we can see that Queens is rated moderately. The borough is neither the highest nor the lowest when it comes to the restaurant violations so this makes them quite average. Of course if those who live in the community want to go out and try a new restaurant, they should feel comfortable doing so. But with everything, they must remain cautious of the places that they choose to dine. 
+
+The types of cuisines offered in the area are abundant. There are a number of American food options in the borough for the elderly to try and without a doubt find a favorite weekly restaurant to attend. Other cuisines in the area includes italian, pizza joints, chinese, korean, japanese and many other ethnic foods that gives residents the opportunity to try food from all over the globe without leaving their borough.  
+
+### Housing 
+
+In terms of housing, we can see that Queens is the second lowest compared to the rest of the boroughs. There are less than 50 reported violations for each category, making fear of safety hazards very low. The elderly living in the area can feel secure in the structure of their homes and children of these senior citizens can have peace of mind knowing that their parents are safe. 
+
+To give more context, each letter that has been identified in the chart relates to a certain type of violation code. Violations labeled as A are non hazardous. These are things such as no peephole on the entrance door, residents keeping chickens and pigeons unlawfully and no street numbers being present on the house. Violations labeled as B are hazardous. These are issues such as inadequate lighting in the house, no smoke detectors and escape exits present. 
+Finally violations labeled as class C are immediately hazardous. So rodents, broken plumbing and no heat would all be violations that are assigned class C. From the chart we can see that the most hazardous level C has the lowest number of cases with class B being the most frequent but this level’s violations can be corrected within a fairly short timespan. 
+
+This security is supported by the number of structural incidents that the borough has reported. Once again, right behind Staten Island, Queens has one of the lowest reported structural incidents. This means that not only are the buildings structurally sound but so are any streets, sidewalks, bridges and highways in the area. 
+
+### Events
+
+Though not too many events happen in the borough compared to others, there are still a fair amount of activities happening in the area for residents to participate in. As we can see, there are a number of special events and farmers markets that happen regularly to keep residents involved and the opportunity to stretch their legs. Special events range from personal family reunions to large block parties in the area. Farmer markets occur on a monthly basis usually around the same time, giving people guaranteed events to look forward to. 
+
+This data also shows that events are more likely to occur on the weekend than during the week. This gives the elderly the opportunity to invite the family over for the weekend, attend an event and have dinner together. Queens pushes the idea of quality time with the people you love and getting out in the area to try something new. In addition being that the elderly generally go to bed earlier on the weeknights, they won’t need to worry about noise from their neighbors.
+
+### Conclustion
+
+As you can see, Queens is a great place for the elderly to live. The borough is full of events and activities for senior citizens to enjoy while feeling safe in their surroundings. Children can know that their parents can have the independence that they desire while being secure in their homes, giving them less to worry about. 
+
+Although Manhattan is the first place that comes to mind of the five boroughs to move to, after the research that has been conducted it is apparent that Manhattan is not the safest nor the best location to settle down. As someone who is considered a senior citizen you want to live in a place where you know you can live the life that you want, with the independence that you desire without the fear for your safety. Queens gives senior citizens this peace of mind, compared to other boroughs  such as Manhattan with large amounts of emergency incidents, restaurant violations, and housing not being up to par. 
+
+Queens is the best borough for the elderly to still live the way that they want to, with people in the same circumstances as them. Just because you are older doesn’t mean that you don’t still have some life to live. Queens gives these individuals to live more life without the fears attached to the big city. It is because of these reasons that Queens is the location to be if you are considered an “elderly”. 
+

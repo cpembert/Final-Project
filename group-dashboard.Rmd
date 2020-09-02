@@ -1,9 +1,10 @@
 ---
-title: "Group-Dashboard"
+title: "Overview of Queens,NY"
 output: 
   flexdashboard::flex_dashboard:
-    vertical_layout: scroll
----
+    vertical_layout: scroll 
+   
+--- 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.width = 10, fig.height = 5)
@@ -93,6 +94,9 @@ by_date = group_by(Perm_event_date,event_borough, wday)
 sum_date = summarise(by_date,count=n())
 ```
 
+Safety 
+==================
+
 ### Emergency Incidents Overview by Borough & Incident Type
 
 ```{r}
@@ -103,12 +107,47 @@ ggplot(my_data, aes(fill = incident_type_main, x = borough)) +
   scale_fill_brewer(palette="Set3", name = 'Main Incident Type')
 ```
 
+### Law Enforcement Incidents by Borough 
+
+```{r}
+le_incidents = subset(my_data, my_data$incident_type_main == 'Law Enforcement')
+
+# Sort Boroughs by Counts
+sorted_boroughs = as.vector(as.data.frame(sort(table(le_incidents$borough)))$Var1)
+le_incidents$borough =  factor(le_incidents$borough,levels = sorted_boroughs) 
+
+ggplot(le_incidents, aes(borough)) +
+  geom_bar(fill = 'lightblue', color = 'black') + 
+  labs(x = 'New York Borough', y = 'Count of Law Enforcement Incidents')
+```
+
+Restaurants 
+==================
+
 ### Number of Restaurant Violations Per Borough
 
 ```{r}
 ggplot(finalproject, aes(boro))+
   geom_bar(mapping = aes(x=boro), color = 'black', fill = 'lightgray') +   
   labs(x = 'New York Borough', y = 'Count of Restaurant Violations') 
+```
+
+Housing 
+==================
+
+### Structual Incidents Per Borough 
+
+```{r}
+# Subset
+structural_incidents = subset(my_data, my_data$incident_type_main == 'Structural')
+
+# Sort Boroughs by Counts
+sorted_boroughs = as.vector(as.data.frame(sort(table(structural_incidents$borough)))$Var1)
+structural_incidents$borough =  factor(structural_incidents$borough,levels = sorted_boroughs) 
+
+ggplot(structural_incidents, aes(borough)) +
+  geom_bar(fill = 'lightpink', color = 'black') + 
+  labs(x = 'New York Borough', y = 'Count of Structural Incidents')
 ```
 
 ### Number of Housing Violations Per Borough by Class
@@ -120,6 +159,9 @@ housing_data_clean %>%
   labs(x = 'New York Borough', y = 'Count of Housing Violations') + 
   scale_fill_brewer(name = 'Housing Class')
 ```
+
+Events 
+==================
 
 ### Types of Events Occuring in Queens 
 
